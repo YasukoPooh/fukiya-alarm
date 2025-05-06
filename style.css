@@ -1,0 +1,34 @@
+body {
+  font-family: sans-serif;
+  text-align: center;
+  padding: 2em;
+  background: #fff8e1;
+}
+
+h1 {
+  font-size: 2em;
+  margin-bottom: 1.5em;
+}
+
+button {
+  font-size: 1.5em;
+  margin: 1em;
+  padding: 1em 2em;
+  width: 200px;
+  border: none;
+  border-radius: 8px;
+  color: white;
+}
+
+button.yellow {
+  background-color: #fdd835;
+  color: black;
+}
+
+button.red {
+  background-color: #e53935;
+}
+
+button.black {
+  background-color: #424242;
+}
