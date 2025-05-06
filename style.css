@@ -10,11 +10,22 @@ h1 {
   margin-bottom: 1.5em;
 }
 
+#timerDisplay {
+  font-size: 3em;
+  margin: 1em;
+}
+
+.button-row {
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+  margin-top: 2em;
+}
+
 button {
   font-size: 1.5em;
-  margin: 1em;
   padding: 1em 2em;
-  width: 200px;
+  width: 150px;
   border: none;
   border-radius: 8px;
   color: white;
@@ -31,4 +42,9 @@ button.red {
 
 button.black {
   background-color: #424242;
+}
+
+button.active {
+  outline: 4px solid #2196f3;
+  box-shadow: 0 0 10px #2196f3;
 }
