@@ -11,6 +11,8 @@ h1 {
 }
 
 #timerDisplay {
+  font-size: 4em;
+
   font-size: 3em;
   margin: 1em;
 }
@@ -47,4 +49,11 @@ button.black {
 button.active {
   outline: 4px solid #2196f3;
   box-shadow: 0 0 10px #2196f3;
+}
+
+
+footer {
+  margin-top: 2em;
+  font-size: 0.75em;
+  color: #555;
 }

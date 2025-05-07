@@ -1,13 +1,18 @@
-# 吹き矢アラームちゃん（GitHub Pages版）
+# 吹き矢アラームちゃん（PWA対応・🎯アイコン版）
 
-## URLにアクセスするだけで動作するWebアラームです
+## 特徴
+- ホーム画面に追加可能なPWA対応
+- 🎯的マークのアイコン付き（赤背景＋白の同心円＋黒枠）
+- 音声ファイルを使用したタイマーアラーム
 
-### 使用方法
-1. このリポジトリを GitHub にアップロードします（index.html がルートに来るように）
-2. 「Settings」→「Pages」→「Source」で `main` ブランチの `/ (root)` を指定します
-3. 発行されたURL（例: https://yourname.github.io/fukiya-alarm/）を使用者に配布してください
+## 使用方法
+1. GitHubにこの一式をアップロード
+2. GitHub Pagesの設定で `main / root` を公開
+3. スマホのChromeでアクセス → 「ホーム画面に追加」で🎯アイコン表示！
 
-### 使用者側の使い方
-- URLにアクセスするだけでアラームを使えます
-- iPhone/Androidの Chrome ブラウザで開くのが推奨です
-- ホーム画面に追加すればアプリのように使えます
+## 音声ファイル一覧
+- start.m4a
+- 2min30sec.m4a
+- 3min.m4a
+- 3min_haneya.m4a
+- finish.m4a
