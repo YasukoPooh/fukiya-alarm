@@ -66,10 +66,10 @@ document.getElementById('startButton').addEventListener('click', () => {
   document.getElementById('startButton').classList.add('active');
   audioStart.play();
 
-  // 音声再生後に2秒待ってタイマー開始
+  // 音声再生後に4秒待ってタイマー開始
   startDelay = setTimeout(() => {
     beginTimerSequence();
-  }, 2000);
+  }, 4000);
 });
 
 document.getElementById('skipButton').addEventListener('click', () => {
