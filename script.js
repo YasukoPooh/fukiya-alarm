@@ -20,10 +20,18 @@ function resetButtonStates() {
   document.getElementById('skipButton').classList.remove('active');
 }
 
+function resetTimer() {
+  clearTimeout(timeout30);
+  clearTimeout(timeout180);
+  clearInterval(countdownInterval);
+  clearTimeout(startDelay);
+  skipped = false;
+  remainingTime = 180;
+  updateTimerDisplay();
+}
+
 function beginTimerSequence() {
   document.getElementById('skipButton').disabled = false;
-  document.getElementById('startButton').classList.add('active');
-  audioStart.play();
 
   timeout30 = setTimeout(() => {
     audio2min30.play();
@@ -51,13 +59,14 @@ function beginTimerSequence() {
 }
 
 document.getElementById('startButton').addEventListener('click', () => {
-  clearTimeout(timeout30);
-  clearTimeout(timeout180);
-  clearInterval(countdownInterval);
-  clearTimeout(startDelay);
+  resetTimer();
   resetButtonStates();
 
-  // 2秒後にタイマー開始（画面ロックでも止まらない）
+  // ボタン反転＆即音声再生
+  document.getElementById('startButton').classList.add('active');
+  audioStart.play();
+
+  // 音声再生後に2秒待ってタイマー開始
   startDelay = setTimeout(() => {
     beginTimerSequence();
   }, 2000);
@@ -70,11 +79,8 @@ document.getElementById('skipButton').addEventListener('click', () => {
 });
 
 document.getElementById('endButton').addEventListener('click', () => {
-  clearTimeout(timeout30);
-  clearTimeout(timeout180);
-  clearTimeout(startDelay);
-  clearInterval(countdownInterval);
   audioFinish.play();
+  resetTimer(); // タイマーを03:00に戻す
   document.getElementById('skipButton').disabled = true;
   resetButtonStates();
 });
