@@ -58,21 +58,26 @@ function startTimer() {
     }
 
     if (!played3min && elapsed >= 180) {
+      played3min = true;
+      document.getElementById('skipButton').disabled = true;
+      clearInterval(countdownInterval);
+
       if (skipped) {
         audio3minHaneya.play().catch(e => console.log("3分(跳ね矢)再生失敗", e));
       } else {
         audio3min.play().catch(e => console.log("3分再生失敗", e));
+        setTimeout(() => {
+          audioFinish.play().catch(e => console.log("終了再生失敗", e));
+          resetTimer();
+        }, 3000); // 3秒待ってから終了音とリセット（音声長に合わせて調整）
       }
-      played3min = true;
-      document.getElementById('skipButton').disabled = true;
-      clearInterval(countdownInterval);
     }
   }, 500);
 }
 
 document.getElementById('startButton').addEventListener('click', () => {
   resetTimer();
-  preloadAudios(); // ユーザー操作内で読み込み
+  preloadAudios();
   document.getElementById('startButton').classList.add('active');
   audioStart.play().catch(e => console.log("開始再生失敗", e));
 
