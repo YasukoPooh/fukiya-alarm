@@ -1,6 +1,6 @@
-let timeout30, timeout180, countdownInterval, startDelay;
+let countdownInterval;
 let skipped = false;
-let remainingTime = 180;
+let startTimestamp = null;
 
 // 音声ファイルの読み込み
 const audioStart = new Audio('audio/start.m4a');
@@ -9,9 +9,12 @@ const audio3min = new Audio('audio/3min.m4a');
 const audio3minHaneya = new Audio('audio/3min_haneya.m4a');
 const audioFinish = new Audio('audio/finish.m4a');
 
-function updateTimerDisplay() {
-  const minutes = String(Math.floor(remainingTime / 60)).padStart(2, '0');
-  const seconds = String(remainingTime % 60).padStart(2, '0');
+let played30 = false;
+let played3min = false;
+
+function updateTimerDisplay(secondsLeft) {
+  const minutes = String(Math.floor(secondsLeft / 60)).padStart(2, '0');
+  const seconds = String(secondsLeft % 60).padStart(2, '0');
   document.getElementById('timerDisplay').textContent = `${minutes}:${seconds}`;
 }
 
@@ -21,55 +24,52 @@ function resetButtonStates() {
 }
 
 function resetTimer() {
-  clearTimeout(timeout30);
-  clearTimeout(timeout180);
   clearInterval(countdownInterval);
-  clearTimeout(startDelay);
   skipped = false;
-  remainingTime = 180;
-  updateTimerDisplay();
+  startTimestamp = null;
+  played30 = false;
+  played3min = false;
+  updateTimerDisplay(180);
+  resetButtonStates();
+  document.getElementById('skipButton').disabled = true;
 }
 
-function beginTimerSequence() {
+function startTimer() {
+  startTimestamp = Date.now();
   document.getElementById('skipButton').disabled = false;
 
-  timeout30 = setTimeout(() => {
-    audio2min30.play();
-  }, 150000);
-
-  timeout180 = setTimeout(() => {
-    if (!skipped) {
-      audio3min.play();
-    } else {
-      audio3minHaneya.play();
-    }
-    document.getElementById('skipButton').disabled = true;
-    resetButtonStates();
-  }, 180000);
-
-  remainingTime = 180;
-  updateTimerDisplay();
   countdownInterval = setInterval(() => {
-    remainingTime--;
-    updateTimerDisplay();
-    if (remainingTime <= 0) {
+    const elapsed = Math.floor((Date.now() - startTimestamp) / 1000);
+    const remaining = 180 - elapsed;
+
+    updateTimerDisplay(Math.max(remaining, 0));
+
+    if (!played30 && elapsed >= 150) {
+      audio2min30.play();
+      played30 = true;
+    }
+
+    if (!played3min && elapsed >= 180) {
+      if (skipped) {
+        audio3minHaneya.play();
+      } else {
+        audio3min.play();
+      }
+      played3min = true;
+      document.getElementById('skipButton').disabled = true;
       clearInterval(countdownInterval);
     }
-  }, 1000);
+  }, 500);
 }
 
 document.getElementById('startButton').addEventListener('click', () => {
   resetTimer();
-  resetButtonStates();
-
-  // ボタン反転＆即音声再生
   document.getElementById('startButton').classList.add('active');
   audioStart.play();
 
-  // 音声再生後に4秒待ってタイマー開始
-  startDelay = setTimeout(() => {
-    beginTimerSequence();
-  }, 4000);
+  setTimeout(() => {
+    startTimer();
+  }, 2000);
 });
 
 document.getElementById('skipButton').addEventListener('click', () => {
@@ -80,7 +80,5 @@ document.getElementById('skipButton').addEventListener('click', () => {
 
 document.getElementById('endButton').addEventListener('click', () => {
   audioFinish.play();
-  resetTimer(); // タイマーを03:00に戻す
-  document.getElementById('skipButton').disabled = true;
-  resetButtonStates();
+  resetTimer();
 });
