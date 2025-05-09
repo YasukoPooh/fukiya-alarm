@@ -22,7 +22,7 @@ h1 {
 }
 
 .button-row {
-  display: block;
+  display: inline-block;
   justify-content: center;
   gap: 0.8em;
   margin-top: 1em;
@@ -36,7 +36,7 @@ button {
   border: none;
   border-radius: 8px;
   color: white;
-  display: block;
+  display: inline-block;
     line-height: 120px;
   text-align: center;
 }
