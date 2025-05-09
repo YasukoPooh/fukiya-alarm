@@ -1,31 +1,37 @@
 body {
   font-family: sans-serif;
   text-align: center;
-  padding: 2em;
+  padding: 1em;
   background: #fff8e1;
 }
 
 h1 {
-  font-size: 2em;
-  margin-bottom: 1.5em;
+  font-size: 1.6em;
+  margin-bottom: 0.2em;
+}
+
+#version {
+  font-size: 0.8em;
+  color: #666;
+  margin-bottom: 0.5em;
 }
 
 #timerDisplay {
-  font-size: 4em;
-  margin: 1em;
+  font-size: 6em;
+  margin: 0.5em 0;
 }
 
 .button-row {
   display: flex;
   justify-content: center;
-  gap: 1em;
-  margin-top: 2em;
+  gap: 0.8em;
+  margin-top: 1em;
 }
 
 button {
-  font-size: 1.5em;
-  padding: 1em 2em;
-  width: 150px;
+  font-size: 1.2em;
+  padding: 0.6em 1em;
+  width: 110px;
   border: none;
   border-radius: 8px;
   color: white;
@@ -45,12 +51,12 @@ button.black {
 }
 
 button.active {
-  outline: 4px solid #2196f3;
-  box-shadow: 0 0 10px #2196f3;
+  outline: 3px solid #2196f3;
+  box-shadow: 0 0 5px #2196f3;
 }
 
 footer {
-  margin-top: 2em;
+  margin-top: 1.5em;
   font-size: 0.75em;
   color: #555;
 }
