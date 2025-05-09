@@ -1,29 +1,23 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>使い方 - 吹矢アラームちゃん</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <style>
     body {
       font-family: sans-serif;
       padding: 1em;
       background: #fff8e1;
     }
-    h1 {
-      font-size: 1.5em;
-      margin-bottom: 0.5em;
+    h1, h2 {
+      color: #333;
     }
-    h2 {
-      font-size: 1.2em;
-      margin-top: 1em;
-    }
-    p, li {
-      font-size: 1em;
-      line-height: 1.6;
-    }
-    ul {
-      padding-left: 1.5em;
+    pre {
+      background: #f0f0f0;
+      padding: 0.5em;
+      overflow-x: auto;
     }
     code {
       background: #eee;
@@ -33,8 +27,9 @@
   </style>
 </head>
 <body>
-<pre>
-# 吹矢アラームちゃん（完全版 v2025.05.09）
+  <div id="content">読み込み中...</div>
+  <script>
+    const markdown = `# 吹矢アラームちゃん（完全版 v2025.05.09）
 
 ## 📱 使い方
 1. 「はじめ」ボタンをタップすると、2秒後にアラームがスタート
@@ -71,7 +66,8 @@
 ## 🎯 その他仕様
 - ボタンは押しやすいように大きめ設計（140×120px）
 - ホーム画面追加時には🎯アイコンが表示されます（PWA対応）
-
-</pre>
+`;
+    document.getElementById('content').innerHTML = marked.parse(markdown);
+  </script>
 </body>
 </html>
