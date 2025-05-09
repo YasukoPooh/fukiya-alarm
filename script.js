@@ -2,15 +2,23 @@ let countdownInterval;
 let skipped = false;
 let startTimestamp = null;
 
-// 音声ファイルの読み込み
-const audioStart = new Audio('audio/start.m4a');
-const audio2min30 = new Audio('audio/2min30sec.m4a');
-const audio3min = new Audio('audio/3min.m4a');
-const audio3minHaneya = new Audio('audio/3min_haneya.m4a');
-const audioFinish = new Audio('audio/finish.m4a');
-
 let played30 = false;
 let played3min = false;
+
+// 事前にAudioを生成
+let audioStart = new Audio('audio/start.m4a');
+let audio2min30 = new Audio('audio/2min30sec.m4a');
+let audio3min = new Audio('audio/3min.m4a');
+let audio3minHaneya = new Audio('audio/3min_haneya.m4a');
+let audioFinish = new Audio('audio/finish.m4a');
+
+function preloadAudios() {
+  audioStart.load();
+  audio2min30.load();
+  audio3min.load();
+  audio3minHaneya.load();
+  audioFinish.load();
+}
 
 function updateTimerDisplay(secondsLeft) {
   const minutes = String(Math.floor(secondsLeft / 60)).padStart(2, '0');
@@ -45,15 +53,15 @@ function startTimer() {
     updateTimerDisplay(Math.max(remaining, 0));
 
     if (!played30 && elapsed >= 150) {
-      audio2min30.play();
+      audio2min30.play().catch(e => console.log("30秒前再生失敗", e));
       played30 = true;
     }
 
     if (!played3min && elapsed >= 180) {
       if (skipped) {
-        audio3minHaneya.play();
+        audio3minHaneya.play().catch(e => console.log("3分(跳ね矢)再生失敗", e));
       } else {
-        audio3min.play();
+        audio3min.play().catch(e => console.log("3分再生失敗", e));
       }
       played3min = true;
       document.getElementById('skipButton').disabled = true;
@@ -64,8 +72,9 @@ function startTimer() {
 
 document.getElementById('startButton').addEventListener('click', () => {
   resetTimer();
+  preloadAudios(); // ユーザー操作内で読み込み
   document.getElementById('startButton').classList.add('active');
-  audioStart.play();
+  audioStart.play().catch(e => console.log("開始再生失敗", e));
 
   setTimeout(() => {
     startTimer();
@@ -79,6 +88,6 @@ document.getElementById('skipButton').addEventListener('click', () => {
 });
 
 document.getElementById('endButton').addEventListener('click', () => {
-  audioFinish.play();
+  audioFinish.play().catch(e => console.log("終了再生失敗", e));
   resetTimer();
 });
