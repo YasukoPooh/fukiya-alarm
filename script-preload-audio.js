@@ -78,7 +78,7 @@ document.getElementById('startButton').addEventListener('click', () => {
 
   setTimeout(() => {
     startTimer();
-  }, 2000);
+  }, 4000);
 });
 
 document.getElementById('skipButton').addEventListener('click', () => {
