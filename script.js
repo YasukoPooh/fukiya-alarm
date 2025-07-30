@@ -52,7 +52,7 @@ function startTimer() {
 
     updateTimerDisplay(Math.max(remaining, 0));
 
-    if (!played30 && elapsed >= 150) {
+    if (!played30 && remaining <= 30) {
       audio2min30.play().catch(e => console.log("30秒前再生失敗", e));
       played30 = true;
     }
