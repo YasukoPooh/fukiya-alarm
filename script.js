@@ -1,104 +1,81 @@
-let countdownInterval;
-let skipped = false;
-let startTimestamp = null;
 
+// JavaScript code with 1-second interval countdown from 3:00
+let timerInterval;
+let startTimestamp;
 let played30 = false;
 let played3min = false;
+let haneyaPressed = false;
 
-// 事前にAudioを生成
-let audioStart = new Audio('audio/start.m4a');
-let audio2min30 = new Audio('audio/2min30sec.m4a');
-let audio3min = new Audio('audio/3min.m4a');
-let audio3minHaneya = new Audio('audio/3min_haneya.m4a');
-let audioFinish = new Audio('audio/finish.m4a');
+const timerDisplay = document.getElementById("timer");
+const startButton = document.getElementById("start");
+const haneyaButton = document.getElementById("haneya");
+const finishButton = document.getElementById("finish");
+const audioStart = new Audio("start.mp4");
+const audio2min30 = new Audio("2min30sec.mp4");
+const audio3min = new Audio("3min.mp4");
+const audio3minHaneya = new Audio("3min_haneya.mp4");
+const audioFinish = new Audio("finish.mp4");
 
-function preloadAudios() {
-  audioStart.load();
-  audio2min30.load();
-  audio3min.load();
-  audio3minHaneya.load();
-  audioFinish.load();
+function formatTime(seconds) {
+  const m = String(Math.floor(seconds / 60)).padStart(2, "0");
+  const s = String(seconds % 60).padStart(2, "0");
+  return `${m}:${s}`;
 }
 
-function updateTimerDisplay(secondsLeft) {
-  const minutes = String(Math.floor(secondsLeft / 60)).padStart(2, '0');
-  const seconds = String(secondsLeft % 60).padStart(2, '0');
-  document.getElementById('timerDisplay').textContent = `${minutes}:${seconds}`;
-}
-
-function resetButtonStates() {
-  document.getElementById('startButton').classList.remove('active');
-  document.getElementById('skipButton').classList.remove('active');
-}
-
-function resetTimer() {
-  clearInterval(countdownInterval);
-  skipped = false;
-  startTimestamp = null;
+function resetUI() {
+  clearInterval(timerInterval);
+  timerDisplay.textContent = "03:00";
+  startButton.classList.remove("active");
+  haneyaButton.classList.remove("active");
   played30 = false;
   played3min = false;
-  updateTimerDisplay(180);
-  resetButtonStates();
-  document.getElementById('skipButton').disabled = true;
+  haneyaPressed = false;
 }
 
-function startTimer() {
-  startTimestamp = Date.now() - 4000; // 4秒後にタイマースタートする差分補正
-  document.getElementById('skipButton').disabled = false;
+startButton.addEventListener("click", () => {
+  resetUI();
+  startButton.classList.add("active");
+  audioStart.play().catch(console.error);
 
-  countdownInterval = setInterval(() => {
-    const elapsed = Math.floor((Date.now() - startTimestamp) / 1000);
-    const remaining = 180 - elapsed;
-
-    updateTimerDisplay(Math.max(remaining, 0));
-
-    if (!played30 && remaining <= 30) {
-      audio2min30.play().catch(e => {
-        console.log("30秒前再生失敗", e);
-        const debugEl = document.getElementById("debug");
-        if (debugEl) {
-          debugEl.textContent = "30秒前エラー: " + e.message;
-        }
-      });
-      played30 = true;
-    }
-
-    if (!played3min && elapsed >= 180) {
-      played3min = true;
-      document.getElementById('skipButton').disabled = true;
-      clearInterval(countdownInterval);
-
-      if (skipped) {
-        audio3minHaneya.play().catch(e => console.log("3分(跳ね矢)再生失敗", e));
-      } else {
-        audio3min.play().catch(e => console.log("3分再生失敗", e));
-        setTimeout(() => {
-          audioFinish.play().catch(e => console.log("終了再生失敗", e));
-          resetTimer();
-        }, 3000); // 3秒待ってから終了音とリセット（音声長に合わせて調整）
-      }
-    }
-  }, 500);
-}
-
-document.getElementById('startButton').addEventListener('click', () => {
-  resetTimer();
-  preloadAudios();
-  document.getElementById('startButton').classList.add('active');
-  audioStart.play().catch(e => console.log("開始再生失敗", e));
-
+  // スタートから1秒後に開始
   setTimeout(() => {
-    startTimer();
-  }, 4000);
+    startTimestamp = Date.now();
+    timerInterval = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - startTimestamp) / 1000);
+      const remaining = Math.max(180 - elapsed, 0);
+      timerDisplay.textContent = formatTime(remaining);
+
+      if (!played30 && remaining === 30) {
+        played30 = true;
+        audio2min30.play().catch(e => {
+          console.log("30秒前再生失敗", e);
+          const debugEl = document.getElementById("debug");
+          if (debugEl) debugEl.textContent = "30秒前エラー: " + e.message;
+        });
+      }
+
+      if (!played3min && remaining === 0) {
+        played3min = true;
+        clearInterval(timerInterval);
+        if (haneyaPressed) {
+          audio3minHaneya.play().catch(console.error);
+        } else {
+          audio3min.play().catch(console.error).then(() => {
+            audioFinish.play().catch(console.error);
+          });
+          resetUI();
+        }
+      }
+    }, 1000);
+  }, 1000);
 });
 
-document.getElementById('skipButton').addEventListener('click', () => {
-  skipped = true;
-  document.getElementById('skipButton').classList.add('active');
-  document.getElementById('skipButton').disabled = true;
+haneyaButton.addEventListener("click", () => {
+  haneyaPressed = true;
+  haneyaButton.classList.add("active");
 });
 
-document.getElementById('endButton').addEventListener('click', () => {
-  audioFinish.play().catch(e => console.log("終了再生失敗", e));
-  resetTimer();
+finishButton.addEventListener("click", () => {
+  audioFinish.play().catch(console.error);
+  resetUI();
 });
