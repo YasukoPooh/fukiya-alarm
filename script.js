@@ -43,7 +43,7 @@ function resetTimer() {
 }
 
 function startTimer() {
-  startTimestamp = Date.now();
+  startTimestamp = Date.now() - 4000; // 4秒後にタイマースタートする差分補正
   document.getElementById('skipButton').disabled = false;
 
   countdownInterval = setInterval(() => {
