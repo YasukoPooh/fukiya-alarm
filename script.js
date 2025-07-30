@@ -54,6 +54,7 @@ function startTimer() {
 
     if (!played30 && remaining <= 30) {
       audio2min30.play().catch(e => console.log("30秒前再生失敗", e));
+      document.getElementById("debug").textContent = "30秒前エラー: " + e.message;
       played30 = true;
     }
 
