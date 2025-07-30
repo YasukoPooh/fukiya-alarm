@@ -36,41 +36,43 @@ startButton.addEventListener("click", () => {
   startButton.classList.add("active");
 
   audioStart.play().then(() => {
-    // 再生完了後に1秒遅らせてカウントダウン開始
-    setTimeout(() => {
-      startTimestamp = Date.now();
-      timerInterval = setInterval(() => {
-        const elapsed = Math.floor((Date.now() - startTimestamp) / 1000);
-        const remaining = Math.max(180 - elapsed, 0);
-        timerDisplay.textContent = formatTime(remaining);
-
-        if (!played30 && remaining === 30) {
-          played30 = true;
-          audio2min30.play().catch(e => {
-            console.log("30秒前再生失敗", e);
-            const debugEl = document.getElementById("debug");
-            if (debugEl) debugEl.textContent = "30秒前エラー: " + e.message;
-          });
-        }
-
-        if (!played3min && remaining === 0) {
-          played3min = true;
-          clearInterval(timerInterval);
-          if (haneyaPressed) {
-            audio3minHaneya.play().catch(console.error);
-          } else {
-            audio3min.play().catch(console.error).then(() => {
-              audioFinish.play().catch(console.error);
-            });
-            resetUI();
-          }
-        }
-      }, 1000);
-    }, 1000);
+    setTimeout(startTimer, 1000); // 再生完了から1秒後に開始
   }).catch(e => {
     console.error("スタート音声再生失敗", e);
+    startTimer(); // 音声失敗してもタイマーは動かす
   });
 });
+
+function startTimer() {
+  startTimestamp = Date.now();
+  timerInterval = setInterval(() => {
+    const elapsed = Math.floor((Date.now() - startTimestamp) / 1000);
+    const remaining = Math.max(180 - elapsed, 0);
+    timerDisplay.textContent = formatTime(remaining);
+
+    if (!played30 && remaining === 30) {
+      played30 = true;
+      audio2min30.play().catch(e => {
+        console.log("30秒前再生失敗", e);
+        const debugEl = document.getElementById("debug");
+        if (debugEl) debugEl.textContent = "30秒前エラー: " + e.message;
+      });
+    }
+
+    if (!played3min && remaining === 0) {
+      played3min = true;
+      clearInterval(timerInterval);
+      if (haneyaPressed) {
+        audio3minHaneya.play().catch(console.error);
+      } else {
+        audio3min.play().catch(console.error).then(() => {
+          audioFinish.play().catch(console.error);
+        });
+        resetUI();
+      }
+    }
+  }, 1000);
+}
 
 haneyaButton.addEventListener("click", () => {
   haneyaPressed = true;
