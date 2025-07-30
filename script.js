@@ -53,8 +53,13 @@ function startTimer() {
     updateTimerDisplay(Math.max(remaining, 0));
 
     if (!played30 && remaining <= 30) {
-      audio2min30.play().catch(e => console.log("30秒前再生失敗", e));
-      document.getElementById("debug").textContent = "30秒前エラー: " + e.message;
+      audio2min30.play().catch(e => {
+        console.log("30秒前再生失敗", e);
+        const debugEl = document.getElementById("debug");
+        if (debugEl) {
+          debugEl.textContent = "30秒前エラー: " + e.message;
+        }
+      });
       played30 = true;
     }
 
