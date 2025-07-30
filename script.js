@@ -43,7 +43,7 @@ function resetTimer() {
 }
 
 function startTimer() {
-  startTimestamp = Date.now() - 4000; // 4秒後にタイマースタートする差分補正
+  startTimestamp = Date.now();
   document.getElementById('skipButton').disabled = false;
 
   countdownInterval = setInterval(() => {
@@ -52,7 +52,7 @@ function startTimer() {
 
     updateTimerDisplay(Math.max(remaining, 0));
 
-    if (!played30 && remaining <= 30) {
+    if (!played30 && elapsed >= 150) {
       audio2min30.play().catch(e => {
         console.log("30秒前再生失敗", e);
         const debugEl = document.getElementById("debug");
